@@ -1,0 +1,2 @@
+# Copy to backend.hcl (git-ignored). The bucket is created by scripts/bootstrap-state.sh.
+bucket = "shoplite-demo-1e7583-tfstate"

@@ -1,0 +1,7 @@
+# Backend services that own a Postgres database (one name per line, same as the app name in shoplite-gitops/apps/).
+# Read by gcp/persistent (Secret Manager shells) and scripts/neon-provision.sh (Neon roles and databases).
+# Adding a service: add a line here, run `terraform apply` in gcp/persistent, then `bash scripts/neon-provision.sh`.
+user-service
+product-service
+order-service
+notification-service
