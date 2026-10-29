@@ -104,6 +104,21 @@ resource "google_storage_bucket_iam_member" "tempo" {
   member = "serviceAccount:${google_service_account.tempo.email}"
 }
 
+# objectAdmin has no storage.buckets.get, which Tempo (and Loki's GCS client) call when they start:
+# without this the pods fail with "403 ... storage.buckets.get denied". legacyBucketReader adds that
+# permission plus object listing, on the one bucket only.
+resource "google_storage_bucket_iam_member" "loki_bucket_reader" {
+  bucket = google_storage_bucket.loki.name
+  role   = "roles/storage.legacyBucketReader"
+  member = "serviceAccount:${google_service_account.loki.email}"
+}
+
+resource "google_storage_bucket_iam_member" "tempo_bucket_reader" {
+  bucket = google_storage_bucket.tempo.name
+  role   = "roles/storage.legacyBucketReader"
+  member = "serviceAccount:${google_service_account.tempo.email}"
+}
+
 # --- Secret Manager (shells only) --------------------------------------------------------
 
 resource "google_secret_manager_secret" "shoplite" {
