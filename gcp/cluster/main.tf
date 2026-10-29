@@ -76,10 +76,14 @@ resource "google_container_cluster" "shoplite" {
   }
 
   # We run our own Loki/Prometheus; skip Google's logging/monitoring agents (fewer system
-  # pods, no Cloud Logging charges). To be confirmed at the first `terraform plan`.
-  logging_service    = "none"
-  monitoring_service = "none"
+  # pods, no Cloud Logging charges). The API refuses logging_service/monitoring_service together
+  # with the *_config blocks (HTTP 400 at the first apply), so only the blocks are used: an empty
+  # component set turns each agent off.
+  logging_config {
+    enable_components = []
+  }
   monitoring_config {
+    enable_components = []
     managed_prometheus {
       enabled = false
     }
